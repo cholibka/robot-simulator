@@ -1,25 +1,92 @@
-import logo from './logo.svg';
 import './App.css';
+import Canvas from "./components/Canvas";
+import TasksList from "./components/TasksList";
+import Tasks from "./components/Tasks";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    TextField
+} from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import {useState} from "react";
+import TasksContext from "./tasks-context";
+import * as React from "react";
+import {SelectChangeEvent} from "@mui/material/Select";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [tasks, setTasks] = useState([]);
+    const value = { tasks, setTasks };
+    const [open, setOpen] = useState(false);
+    const [firstPort, setFirstPort] = React.useState('A');
+    const [secondPort, setSecondPort] = React.useState('C');
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleChangeFirstPort = (event: SelectChangeEvent) => {
+        setFirstPort(event.target.value);
+    };
+
+    const handleChangeSecondPort = (event: SelectChangeEvent) => {
+        setSecondPort(event.target.value);
+    };
+
+    return (
+        <TasksContext.Provider value={value}>
+            <div className={'centered'}>
+                <IconButton aria-label="settings" style={{float: 'right'}} onClick={handleClickOpen}>
+                    <SettingsIcon/>
+                </IconButton>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle style={{fontFamily: "Comic Sans MS"}}>Robot settings</DialogTitle>
+                    <DialogContent>
+                        <p>Engine ports</p>
+                        <TextField
+                            margin="dense"
+                            id="first_pin"
+                            value={firstPort}
+                            onChange={handleChangeFirstPort}
+                            label="First pin"
+                            variant="outlined"
+                            size="small"
+                            style={{width: '30%', marginRight: '4%'}}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="second_pin"
+                            label="Second pin"
+                            value={secondPort}
+                            onChange={handleChangeSecondPort}
+                            variant="outlined"
+                            size="small"
+                            style={{width: '30%'}}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Close</Button>
+                    </DialogActions>
+                </Dialog>
+                <p>Simulation of robot movements</p>
+                <div className={'main-border'}>
+                    <Canvas/>
+                    <div className={'right-div'}>
+                        <Tasks movement={"move"}/>
+                        <Tasks movement={"rotate"}/>
+                        <TasksList firstPort={firstPort} secondPort={secondPort}/>
+                    </div>
+                </div>
+            </div>
+        </TasksContext.Provider>
+    );
 }
 
 export default App;
