@@ -4,13 +4,44 @@ import * as React from "react";
 import {useContext, useState} from "react";
 import TasksContext from "../tasks-context";
 import CloseIcon from '@mui/icons-material/Close';
+import raw from '../template.txt';
 
 function TasksList({firstPort, secondPort}) {
     const [open, setOpen] = useState(false);
     const { tasks, setTasks } = useContext(TasksContext);
+    const [template, setTemplate] = useState('');
+
 
     const handleClickOpen = () => {
-        setOpen(true);
+        fetch(raw)
+            .then(r => r.text())
+            .then(text => {
+                setOpen(true);
+                let regex = "[START]"
+                if (text.match(regex)) {
+                    console.log(regex)
+                    let ports = `OUT_${firstPort}${secondPort}`;
+                    let code = "";
+                    tasks.forEach(task => {
+                        if(task.movement === "move") {
+                            let distance = task.distance
+                            if(task.direction === 'backward')
+                                distance *= -1
+                            code += `\tGoStraight(${ports}, ${distance})\n`
+                        }
+                        else {
+                            let angle = task.distance
+                            if(task.direction === "left")
+                                code += `\tRotateRobotLeft(${ports}, ${angle})\n`
+                            else
+                                code += `\tRotateRobotRight(${ports}, ${angle})\n`
+                            }
+                        })
+                    text = text.replace(regex, code);
+                    console.log(text)
+                }
+                setTemplate(text)
+            });
     };
 
     const handleClose = () => {
@@ -98,10 +129,13 @@ function TasksList({firstPort, secondPort}) {
                     Generate code
                 </Button>
             </div>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"xl"}>
                 <DialogTitle style={{fontFamily: "Comic Sans MS"}}>Generated code</DialogTitle>
                 <DialogContent>
-                    {firstPort} {secondPort}
+                    <p style={{fontFamily: "consolas", whiteSpace: "pre"}}>
+                        {template}
+
+                    </p>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>

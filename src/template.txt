@@ -1,0 +1,43 @@
+#define CIRCUMFERENCE 17.25 // Obwód koła
+#define AXIS_WIDTH 20       // Szerokość osi robota
+#define POWER 50
+#define TOTAL_X 100
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define BOTH_MOTORS OUT_AC
+#define TOTAL_Y 100
+
+#define PI 3.1415926
+#define FULL_ANGLE 360.0
+#define DISTANCE(dist_cm) (dist_cm * FULL_ANGLE / CIRCUMFERENCE)
+#define ROTATE_ROBOT_ANGLE(angle) (AXIS_WIDTH * PI * angle / CIRCUMFERENCE) // distance(ax * pi * angle / full_angle)
+
+
+void RotateRobotLeft(byte ports, int angle)
+{
+    Off(ports);
+    Wait(300);
+    RotateMotorEx(ports, POWER, 1.2 * ROTATE_ROBOT_ANGLE(angle), 100, true, true);
+    Wait(300);
+}
+
+void RotateRobotRight(byte ports, int angle)
+{
+    Off(ports);
+    Wait(300);
+    RotateMotorEx(ports, POWER, 1.1 * ROTATE_ROBOT_ANGLE(angle), -100, true, true);
+    Wait(300);
+}
+
+void GoStraight(byte ports, int distance)
+{
+    Off(ports);
+    Wait(100);
+    RotateMotorEx(ports, POWER, DISTANCE(distance), 0, true, true);
+    Wait(100);
+}
+
+task main()
+{
+[START]
+}
