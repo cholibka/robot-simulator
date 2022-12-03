@@ -99,7 +99,7 @@ function TasksList({firstPort, secondPort}) {
                 </Button>
             </div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle style={{fontFamily: "Comic Sans MS"}}>Robot settings</DialogTitle>
+                <DialogTitle style={{fontFamily: "Comic Sans MS"}}>Generated code</DialogTitle>
                 <DialogContent>
                     {firstPort} {secondPort}
                 </DialogContent>
