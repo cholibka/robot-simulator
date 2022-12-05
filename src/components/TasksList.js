@@ -37,14 +37,14 @@ function TasksList({firstPort, secondPort, circumference, axisWidth, power}) {
                             let distance = task.distance
                             if(task.direction === 'backward')
                                 distance *= -1
-                            code += `    GoStraight(${distance})\n`
+                            code += `    GoStraight(${distance});\n`
                         }
                         else {
                             let angle = task.distance
                             if(task.direction === "left")
-                                code += `    RotateRobotLeft(${angle})\n`
+                                code += `    RotateRobotLeft(${angle});\n`
                             else
-                                code += `    RotateRobotRight(${angle})\n`
+                                code += `    RotateRobotRight(${angle});\n`
                             }
                         })
                     text = text.replace(regex, code);
