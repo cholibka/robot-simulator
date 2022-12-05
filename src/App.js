@@ -36,23 +36,60 @@ function App() {
     };
 
     const handleChangeFirstPort = (event: SelectChangeEvent) => {
-        setFirstPort(event.target.value);
+        let port = event.target.value
+        setFirstPort(setPorts(port,"A", 0));
     };
 
     const handleChangeSecondPort = (event: SelectChangeEvent) => {
-        setSecondPort(event.target.value);
+        let port = event.target.value
+        setSecondPort(setPorts(port, "C", 1));
     };
 
+    const setPorts = (port, default_port, port_number) => {
+        const ports = ["A", "B", "C", "D"]
+        if(port.length > 1)
+        {
+            port = port[0]
+        }
+        if(port.length === 1) {
+            if (!ports.includes(port))
+            {
+                console.log(port)
+                port = default_port
+            }
+        }
+
+        const pins = [secondPort, firstPort]
+
+        console.log(pins[port_number])
+        while(port === pins[port_number])
+            port = ports[Math.floor(Math.random() * ports.length)];
+
+        return port
+    }
+
     const handleChangePower = (event: SelectChangeEvent) => {
-        setPower(event.target.value);
+        if(event.target.value > 100)
+            setPower(100)
+        else if(event.target.value < 0)
+            setPower(0)
+        else setPower(event.target.value);
     };
 
     const handleChangeCircumference = (event: SelectChangeEvent) => {
-        setCircumference(event.target.value);
+        if(event.target.value > 100)
+            setCircumference(100)
+        else if(event.target.value < 0)
+            setCircumference(0)
+        else setCircumference(event.target.value);
     };
 
     const handleChangeAxisWidth = (event: SelectChangeEvent) => {
-        setAxisWidth(event.target.value);
+        if(event.target.value > 100)
+            setAxisWidth(100)
+        else if(event.target.value < 0)
+            setAxisWidth(0)
+        else setAxisWidth(event.target.value);
     };
 
     return (
@@ -66,6 +103,7 @@ function App() {
                     <DialogContent>
                         <p>Engine ports</p>
                         <TextField
+                            inputProps={{ pattern: "[A-D]" }}
                             margin="dense"
                             id="first_pin"
                             value={firstPort}
@@ -79,38 +117,42 @@ function App() {
                             margin="dense"
                             id="second_pin"
                             label="Second pin"
+                            inputProps={{ pattern: "[A-D]" }}
                             value={secondPort}
                             onChange={handleChangeSecondPort}
                             variant="outlined"
                             size="small"
                             style={{width: '30%'}}
                         />
-                        <p>POWER</p>
+                        <p>Power</p>
                         <TextField
                             margin="dense"
                             id="power"
                             value={power}
+                            type={"number"}
                             onChange={handleChangePower}
                             label="Power"
                             variant="outlined"
                             size="small"
                             style={{width: '30%', marginRight: '4%'}}
                         />
-                        <p>CIRCUMFERENCE</p>
+                        <p>Circumference</p>
                         <TextField
                             margin="dense"
                             id="circumference"
                             value={circumference}
+                            type={"number"}
                             onChange={handleChangeCircumference}
                             label="Circumference"
                             variant="outlined"
                             size="small"
                             style={{width: '30%', marginRight: '4%'}}
                         />
-                        <p>AXIS WIDTH</p>
+                        <p>Axis width</p>
                         <TextField
                             margin="dense"
                             id="axis_width"
+                            type={"number"}
                             value={axisWidth}
                             onChange={handleChangeAxisWidth}
                             label="Axis Width"

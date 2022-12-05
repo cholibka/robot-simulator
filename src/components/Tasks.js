@@ -25,21 +25,36 @@ function Tasks({movement}) {
     };
 
     const handleChangeDistance = (event: SelectChangeEvent) => {
-        setDistance(event.target.value);
+        if(event.target.value > 200)
+            setDistance(200);
+        else if(event.target.value < 0)
+            setDistance(0)
+        else setDistance(event.target.value)
     };
 
     const handleChangeAngle = (event: SelectChangeEvent) => {
-        setAngle(event.target.value);
+        if(event.target.value > 360)
+            setAngle(360);
+        else if(event.target.value < 0)
+            setAngle(0)
+        else setAngle(event.target.value)
     };
 
     const addTask = () => {
         if(movement === 'move') {
-            let obj = {movement: movement, distance: distance, direction: move};
-            setTasks([...tasks, obj]);
+            console.log(distance)
+            console.log(typeof move)
+            if(distance !== '' && move !== '')
+            {
+                let obj = {movement: movement, distance: distance, direction: move};
+                setTasks([...tasks, obj]);
+            }
         }
         else {
-            let obj = {movement: movement, distance: angle, direction: rotate}
-            setTasks([...tasks, obj]);
+            if(angle !== '' && rotate !== '') {
+                let obj = {movement: movement, distance: angle, direction: rotate}
+                setTasks([...tasks, obj]);
+            }
         }
     };
 
@@ -67,6 +82,7 @@ function Tasks({movement}) {
                             label="Distance (cm)"
                             variant="outlined"
                             size="small"
+                            type={"number"}
                             style={{width: '40%'}}
                             value={distance}
                             onChange={handleChangeDistance}/>
@@ -96,6 +112,7 @@ function Tasks({movement}) {
                             label="Angle"
                             variant="outlined"
                             size="small"
+                            type={"number"}
                             style={{width: '40%'}}
                             value={angle}
                             onChange={handleChangeAngle}/>
