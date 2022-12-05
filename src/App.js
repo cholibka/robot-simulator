@@ -23,6 +23,9 @@ function App() {
     const [open, setOpen] = useState(false);
     const [firstPort, setFirstPort] = React.useState('A');
     const [secondPort, setSecondPort] = React.useState('C');
+    const [power, setPower] = React.useState(60);
+    const [circumference, setCircumference] = React.useState(17.25);
+    const [axisWidth, setAxisWidth] = React.useState(20);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -38,6 +41,18 @@ function App() {
 
     const handleChangeSecondPort = (event: SelectChangeEvent) => {
         setSecondPort(event.target.value);
+    };
+
+    const handleChangePower = (event: SelectChangeEvent) => {
+        setPower(event.target.value);
+    };
+
+    const handleChangeCircumference = (event: SelectChangeEvent) => {
+        setCircumference(event.target.value);
+    };
+
+    const handleChangeAxisWidth = (event: SelectChangeEvent) => {
+        setAxisWidth(event.target.value);
     };
 
     return (
@@ -70,6 +85,39 @@ function App() {
                             size="small"
                             style={{width: '30%'}}
                         />
+                        <p>POWER</p>
+                        <TextField
+                            margin="dense"
+                            id="power"
+                            value={power}
+                            onChange={handleChangePower}
+                            label="Power"
+                            variant="outlined"
+                            size="small"
+                            style={{width: '30%', marginRight: '4%'}}
+                        />
+                        <p>CIRCUMFERENCE</p>
+                        <TextField
+                            margin="dense"
+                            id="circumference"
+                            value={circumference}
+                            onChange={handleChangeCircumference}
+                            label="Circumference"
+                            variant="outlined"
+                            size="small"
+                            style={{width: '30%', marginRight: '4%'}}
+                        />
+                        <p>AXIS WIDTH</p>
+                        <TextField
+                            margin="dense"
+                            id="axis_width"
+                            value={axisWidth}
+                            onChange={handleChangeAxisWidth}
+                            label="Axis Width"
+                            variant="outlined"
+                            size="small"
+                            style={{width: '30%', marginRight: '4%'}}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Close</Button>
@@ -81,7 +129,7 @@ function App() {
                     <div className={'right-div'}>
                         <Tasks movement={"move"}/>
                         <Tasks movement={"rotate"}/>
-                        <TasksList firstPort={firstPort} secondPort={secondPort}/>
+                        <TasksList firstPort={firstPort} secondPort={secondPort} circumference={circumference} axisWidth={axisWidth} power={power}/>
                     </div>
                 </div>
             </div>

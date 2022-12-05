@@ -6,7 +6,7 @@ import TasksContext from "../tasks-context";
 import CloseIcon from '@mui/icons-material/Close';
 import raw from '../template.txt';
 
-function TasksList({firstPort, secondPort}) {
+function TasksList({firstPort, secondPort, circumference, axisWidth, power}) {
     const [open, setOpen] = useState(false);
     const { tasks, setTasks } = useContext(TasksContext);
     const [template, setTemplate] = useState('');
@@ -18,27 +18,36 @@ function TasksList({firstPort, secondPort}) {
             .then(text => {
                 setOpen(true);
                 let regex = "[START]"
+                let regex_circumference = "{circumference}"
+                let regex_axisWidth = "{axis_width}"
+                let regex_power = "{power}"
+                let port_left = "{port_left}"
+                let port_right = "{port_right}"
+
+                text = text.replace(regex_circumference, circumference)
+                    .replace(regex_axisWidth, axisWidth)
+                    .replace(regex_power, power)
+                    .replaceAll(port_left, firstPort)
+                    .replaceAll(port_right, secondPort)
+
                 if (text.match(regex)) {
-                    console.log(regex)
-                    let ports = `OUT_${firstPort}${secondPort}`;
                     let code = "";
                     tasks.forEach(task => {
                         if(task.movement === "move") {
                             let distance = task.distance
                             if(task.direction === 'backward')
                                 distance *= -1
-                            code += `\tGoStraight(${ports}, ${distance})\n`
+                            code += `\tGoStraight(${distance})\n`
                         }
                         else {
                             let angle = task.distance
                             if(task.direction === "left")
-                                code += `\tRotateRobotLeft(${ports}, ${angle})\n`
+                                code += `\tRotateRobotLeft(${angle})\n`
                             else
-                                code += `\tRotateRobotRight(${ports}, ${angle})\n`
+                                code += `\tRotateRobotRight(${angle})\n`
                             }
                         })
                     text = text.replace(regex, code);
-                    console.log(text)
                 }
                 setTemplate(text)
             });
